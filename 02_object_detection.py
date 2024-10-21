@@ -84,13 +84,26 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten, Input
 from tensorflow.keras.models import Model
 import tensorflow as tf
 
-inceprion_resnet = InceptionResNetV2(weights = "imagenet", include_top = False, input_tensor = Input(shape = (224, 224, 3)))
-inceprion_resnet.trainable = False
-
-headmodel = inceprion_resnet.output
+inception_resnet = InceptionResNetV2(weights="imagenet",include_top=False,
+                                     input_tensor=Input(shape=(224,224,3)))
+inception_resnet.trainable=False
+# ---------------------
+headmodel = inception_resnet.output
 headmodel = Flatten()(headmodel)
-headmodel = Dense(500, activation = "relu")(headmodel)
-headmodel = Dense(250, activation = "relu")(headmodel)
+headmodel = Dense(500,activation="relu")(headmodel)
+headmodel = Dense(250,activation="relu")(headmodel)
+headmodel = Dense(4,activation='sigmoid')(headmodel)
+# ---------- model
+model = Model(inputs=inception_resnet.input,outputs=headmodel)
 
+# complie model
+model.compile(loss='mse',optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4))
+# model.summary()
+# model traninig
+from tensorflow.keras.callbacks import TensorBoard
+tensor_flow_board = TensorBoard('object_detection2')
+history = model.fit(x = x_train, y = y_train, batch_size = 10, epochs = 5, 
+                    validation_data = (x_test, y_test), callbacks = [tensor_flow_board])
 
-headmodel = Dense(4, activation = 'sigmoid')(headmodel)
+model.save('./models/object_detection2.keras')
+
