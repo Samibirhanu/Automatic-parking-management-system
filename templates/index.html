@@ -11,5 +11,34 @@
             </div>
         </form>
     </div>
+    {% if upload %}
+    <div class="container">
+        <table>
+            <tr>
+                <td>
+                    <img class="rounded float-left img-fluid" src="./static/upload/{{ upload_image }}" alt="">
+                </td>
+                <td>
+                    <img class="rounded float-right img-fluid" src="./static/upload/predict/{{ upload_image }}" alt="">
+                </td>
+            </tr> 
+        </table>
+        <br>
+        <table style="border: solid black; width: 100%;">
+            <tr style="border: solid black;">
+                <th>Cropped Licence Plate Image</th>
+                <th style="padding-left: 20px;">Text</th>
+            </tr>
+            <tr style="border: solid black;" >
+                <td>
+                    <img class="img-fluid" src="./static/upload/roi/{{ upload_image }}" alt="">
+                </td>
+                <td style="background-color: greenyellow;">
+                    <h1 class="diplay-8">{{ text }}</h1>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
 
 {% endblock body %}
