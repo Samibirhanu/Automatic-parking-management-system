@@ -17,3 +17,12 @@ labelImg-master/
 images_labeled/
 
 images/
+
+Model/
+
+*.onnx
+*.pt
+data_images/
+test_images/
+YOLO-v5/images_labeled/
+*.yaml
