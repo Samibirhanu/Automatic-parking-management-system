@@ -26,3 +26,5 @@ data_images/
 test_images/
 YOLO-v5/images_labeled/
 *.yaml
+
+static/
