@@ -120,3 +120,4 @@ results, texts = yolo_predictions(img, net, img_path)
 # Print extracted texts
 for i, text in enumerate(texts):
     print(f"Text from ROI {i}: {text}")
+

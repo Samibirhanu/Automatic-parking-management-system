@@ -48,61 +48,6 @@ def non_maximum_suppression(input_image, detections):
     
     return boxes_np, confidences_np, index
 
-def save_cropped_images(image, boxes_np, index, img_path, confidences_np):
-    cropped_images = []
-    for ind in index:
-        x, y, w, h = boxes_np[ind]
-        cropped_img = image[y:y+h, x:x+w]
-        bb_conf = confidences_np[ind]
-        conf_text = 'plate: {:.0f}%'.format(bb_conf * 100)
-        
-        # Save full image with bounding box
-        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 255), 2)  # Main box
-        cv2.rectangle(image, (x, y - 30), (x + w, y), (255, 0, 255), -1)  # Background for text
-        cv2.putText(image, conf_text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
-        save_predict_path = os.path.join('./static/upload/predict', os.path.basename(img_path))
-        cv2.imwrite(save_predict_path, image)
-        
-        # Save cropped ROI
-        roi_filename = f"roi_{ind}_{os.path.basename(img_path)}"
-        save_roi_path = os.path.join('./static/upload/roi', roi_filename)
-        cv2.imwrite(save_roi_path, cropped_img)
-        cropped_images.append(save_roi_path)
-
-    return cropped_images
-
-def extract_text_from_image(cropped_image_path):
-    # Read the cropped image and use pytesseract to extract text
-    cropped_img = cv2.imread(cropped_image_path)
-    text = pt.image_to_string(cropped_img)
-    return text
-
-def drawings(image, boxes_np, confidences_np, index, img_path):
-    # draw bounding box and save cropped images
-    cropped_images = save_cropped_images(image, boxes_np, index, img_path, confidences_np)
-
-    for ind in index:
-        x, y, w, h = boxes_np[ind]
-        bb_conf = confidences_np[ind]
-        conf_text = 'plate: {:.0f}%'.format(bb_conf * 100)
-
-        # Drawing bounding box as per your specification
-        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 255), 2)  # Main box
-        cv2.rectangle(image, (x, y - 30), (x + w, y), (255, 0, 255), -1)  # Background for text
-        cv2.putText(image, conf_text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 1)
-
-    return image, cropped_images
-
-def yolo_predictions(img, net, img_path):
-    input_image, detections = get_detections(img, net)
-    boxes_np, confidences_np, index = non_maximum_suppression(input_image, detections)
-    result_img, cropped_images = drawings(img, boxes_np, confidences_np, index, img_path)
-    
-    # Extract text from each cropped image
-    extracted_texts = [extract_text_from_image(roi) for roi in cropped_images]
-
-    return result_img, extracted_texts
-
 # settings
 INPUT_WIDTH = 640
 INPUT_HEIGHT = 640
