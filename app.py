@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import os
-from deeplearning import OCR
+from yolo_deep_learning_integartion import yolo_OCR
 # webserver gateway interface
 app = Flask(__name__)
 
@@ -14,7 +14,7 @@ def index():
         filename = upload_file.filename
         path_save = os.path.join(UPLOAD_PATH, filename)
         upload_file.save(path_save)
-        text = OCR(path_save, filename)
+        text = yolo_OCR(path_save, filename)
         return render_template('index.html', upload=True, upload_image = filename, text = text)
 
 
