@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os 
 import pytesseract as pt
+import easyocr
 
 # Function to get detections from an image using YOLO model
 def get_detections(img, net):
@@ -45,12 +46,18 @@ def non_maximum_suppression(input_image, detections):
     boxes_np = np.array(boxes).tolist()
     confidences_np = np.array(confidences).tolist()
     indices = cv2.dnn.NMSBoxes(boxes_np, confidences_np, 0.05, 0.45)
-    # Check if indices are returned, then flatten the array if it's not empty
-    if len(indices) > 0:
-        indices = indices.flatten()
+
+    # Check if 'indices' is a non-empty list or array, then flatten if necessary
+    if isinstance(indices, tuple) and len(indices) > 0:
+        indices = indices[0].flatten()  # Access the first element and flatten
+    elif isinstance(indices, list) and len(indices) > 0:
+        indices = np.array(indices).flatten()  # Convert to array and flatten if it's a list
+
+# 'indices' will now be a flattened array if boxes were found, or empty otherwise.
+
 
     
-    return boxes_np, confidences_np, index
+    return boxes_np, confidences_np, indices
 
 # settings
 INPUT_WIDTH = 640
@@ -88,7 +95,7 @@ def yolo_object_detection(image_path, filename, net):
     else:
         return None  # No detections found
     
-
+reader = easyocr.Reader(['en'])
 def yolo_OCR(image_path, filename):
     # Perform object detection to get bounding box coordinates
     coords = yolo_object_detection(image_path, filename, net)
@@ -101,7 +108,8 @@ def yolo_OCR(image_path, filename):
         cv2.imwrite(f'./static/upload/roi/{filename}', roi)
 
         # Perform OCR on the cropped region
-        text = pt.image_to_string(roi)
+        perform_ocr = reader.readtext(roi)
+        text = " ".join([result[1] for result in perform_ocr])
         print(text)
         return text
     else:
