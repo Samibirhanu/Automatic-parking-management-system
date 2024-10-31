@@ -4,8 +4,9 @@ import cv2
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import tensorflow as tf
 import pytesseract as pt
+import os
 
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 model = tf.keras.models.load_model('./object_detection.keras')
 
 def object_detection(path, filename):

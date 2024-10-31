@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import cv2
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import tensorflow as tf
+import os
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 # load model
 
@@ -73,14 +76,14 @@ def object_detection(path):
 
 # Load the image using OpenCV
 #/home/samuel/Downloads/sample_ethiopian.jpg download location
-path = '/home/samuel/Downloads/stella_car_3.jpg'
+path = '/home/samuel/Downloads/sample_ethiopian.jpg'
 image, cods = object_detection(path)
 
 # Convert the image from BGR to RGB (since OpenCV uses BGR by default)
 image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 # Display the image using OpenCV
-output_path = '/home/samuel/Downloads/stella_car_1_crop_resized.jpg'
+output_path = '/home/samuel/Downloads/inceptionrsnet_detection/sample_ethiopian.jpg'
 cv2.imwrite(output_path, image_rgb)
 cv2.imshow('Detected Objects', image_rgb)
 
@@ -88,17 +91,17 @@ cv2.imshow('Detected Objects', image_rgb)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-import pytesseract as pt
+# import pytesseract as pt
 
-img = load_img(path)
-img = np.array(img)
-xmin, xmax, ymin, ymax = cods[0]
-roi = img[ymin:ymax, xmin:xmax]
+# img = load_img(path)
+# img = np.array(img)
+# xmin, xmax, ymin, ymax = cods[0]
+# roi = img[ymin:ymax, xmin:xmax]
 # plt.imshow(roi)
 # plt.show()
 
 
 # extract text from image
-extracted_plate = pt.image_to_string(roi)
-print(extracted_plate)
+# extracted_plate = pt.image_to_string(roi)
+# print(extracted_plate)
 

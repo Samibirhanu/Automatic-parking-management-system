@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import os
 from yolo_deep_learning_integartion_copy import yolo_OCR
+from color_detection import plate_color_detection
 # webserver gateway interface
 app = Flask(__name__)
 
@@ -15,7 +16,8 @@ def index():
         path_save = os.path.join(UPLOAD_PATH, filename)
         upload_file.save(path_save)
         text = yolo_OCR(path_save, filename)
-        return render_template('index.html', upload=True, upload_image = filename, text = text)
+        color = plate_color_detection(path_save)
+        return render_template('index.html', upload=True, upload_image = filename, text = text , color = color)
 
 
     return render_template('index.html', upload=False)
