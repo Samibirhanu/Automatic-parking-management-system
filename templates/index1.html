@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h2>Upload and Process License Plate Image</h2>
+        <p class="text-muted">Upload an image to analyze the license plate details</p>
+    </div>
+    <form action="#" method="POST" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" name="image_name" required>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </form>
+    
+    {% if upload %}
+    <div class="mt-5">
+        <div class="row text-center">
+            <div class="col-md-6">
+                <h4>Original Image</h4>
+                <img src="./static/upload/{{ upload_image }}" alt="Uploaded Image" class="img-thumbnail">
+            </div>
+            <div class="col-md-6">
+                <h4>Processed Image</h4>
+                <img src="./static/upload/predict/{{ upload_image }}" alt="Processed Image" class="img-thumbnail">
+            </div>
+        </div>
+
+        <div class="mt-4 p-4 rounded shadow bg-white">
+            <h5 class="text-center">License Plate Details</h5>
+            <table class="table table-bordered mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Cropped License Plate Image</th>
+                        <th>Text</th>
+                        <th>Plate Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="./static/upload/roi/{{ upload_image }}" alt="Cropped Image" class="img-thumbnail">
+                        </td>
+                        <td class="align-middle">
+                            <h6 class="fw-bold">{{ text }}</h6>
+                        </td>
+                        <td class="align-middle">
+                            <h6 class="fw-bold">{{ color }}</h6>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Optional: Add smooth transition for image loading -->
+<style>
+    img {
+        transition: transform 0.3s ease-in-out;
+    }
+    img:hover {
+        transform: scale(1.05);
+    }
+</style>
+{% endblock body %}

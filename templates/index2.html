@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h2 class="display-5 text-primary">License Plate Recognition</h2>
+        <p class="text-secondary">Upload an image to analyze the license plate details below</p>
+    </div>
+    
+    <!-- Upload Form -->
+    <form action="#" method="POST" enctype="multipart/form-data" class="p-4 shadow rounded bg-white">
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" name="image_name" required>
+            <button type="submit" class="btn btn-primary px-4">Upload</button>
+        </div>
+    </form>
+
+    <!-- Results Section -->
+    {% if upload %}
+    <div class="mt-5">
+        <!-- Image Display -->
+        <div class="row g-4">
+            <div class="col-md-6 text-center">
+                <h5>Original Image</h5>
+                <img src="./static/upload/{{ upload_image }}" alt="Uploaded Image" class="img-thumbnail shadow-sm">
+            </div>
+            <div class="col-md-6 text-center">
+                <h5>Processed Image</h5>
+                <img src="./static/upload/predict/{{ upload_image }}" alt="Processed Image" class="img-thumbnail shadow-sm">
+            </div>
+        </div>
+
+        <!-- License Plate Details Table -->
+        <div class="mt-4 p-4 shadow-sm rounded bg-light">
+            <h5 class="text-center text-primary mb-4">License Plate Details</h5>
+            <table class="table table-striped table-hover">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>Cropped License Plate Image</th>
+                        <th>Text</th>
+                        <th>Licence Plate Number</th>
+                        <th>Plate Type</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>
+                            <img src="./static/upload/roi/{{ upload_image }}" alt="Cropped License Plate" class="img-thumbnail">
+                        </td>
+                        <td>
+                            <span class="badge bg-success fs-6">{{ text }}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-success fs-6">{{ extracted_plate_number }}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-black fs-6">{{ color }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Styles and Animations -->
+<style>
+    /* General Page Styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* Upload Form Styling */
+    form {
+        max-width: 500px;
+        margin: 0 auto;
+        border: 1px solid #e0e0e0;
+        transition: box-shadow 0.3s ease;
+    }
+    form:hover {
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Image Hover Effect */
+    img.img-thumbnail {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    img.img-thumbnail:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Badge Styling */
+    .badge {
+        padding: 0.5em 1em;
+        font-weight: 500;
+    }
+</style>
+
+<!-- Optional Tooltip and Popover Initialization (for Interactive Tips) -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    });
+</script>
+
+{% endblock body %}
